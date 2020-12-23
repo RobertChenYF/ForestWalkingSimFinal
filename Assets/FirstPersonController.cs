@@ -24,7 +24,7 @@ public class FirstPersonController : MonoBehaviour
     public static float pitch = 0.0f;
     [HideInInspector]public bool AbleToMove = true;
 
-    private PlayerControls playerControls;
+    //private PlayerControls playerControls;
 
 
     // Start is called before the first frame update
