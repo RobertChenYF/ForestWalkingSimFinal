@@ -14,7 +14,7 @@ public class FirstPersonController : MonoBehaviour
     private Vector3 moveDirection;
     CharacterController characterController;
     public GameObject cameraOfThis;
-    public Animator animator;
+    //public Animator animator;
     public float speedH = 2.0f;
     public float speedV = 2.0f;
     private float currentSpeed;
@@ -24,6 +24,7 @@ public class FirstPersonController : MonoBehaviour
     public static float pitch = 0.0f;
     [HideInInspector]public bool AbleToMove = true;
 
+    //private PlayerControls playerControls;
 
 
     // Start is called before the first frame update
