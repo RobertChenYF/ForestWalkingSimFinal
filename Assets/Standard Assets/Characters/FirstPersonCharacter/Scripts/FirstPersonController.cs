@@ -42,11 +42,17 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private float m_NextStep;
         private bool m_Jumping;
         private AudioSource m_AudioSource;
+        private Animator liftMap;
+        private Animator flipMap;
 
         public bool canControl = true;
+
+        public Transform m_Target;
         // Use this for initialization
         private void Start()
         {
+            liftMap = GameObject.Find("Map and compass").GetComponent<Animator>();
+            flipMap = GameObject.Find("Map").GetComponent<Animator>();
             m_CharacterController = GetComponent<CharacterController>();
             m_Camera = Camera.main;
             m_OriginalCameraPosition = m_Camera.transform.localPosition;
@@ -63,11 +69,19 @@ namespace UnityStandardAssets.Characters.FirstPerson
         // Update is called once per frame
         private void Update()
         {
+            if (!canControl)
+            {
+            LookAt();
+            }
+            else
+            {
             RotateView();
+            }
+            
             // the jump state needs to read here to make sure it is not missed
             if (!m_Jump)
             {
-                m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
+               // m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
             }
 
             if (!m_PreviouslyGrounded && m_CharacterController.isGrounded)
@@ -220,7 +234,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 #if !MOBILE_INPUT
             // On standalone builds, walk/run speed is modified by a key press.
             // keep track of whether or not the character is walking or running
-            m_IsWalking = !Input.GetKey(KeyCode.LeftShift);
+            //m_IsWalking = true;
 #endif
             // set the desired speed to be walking or running
             speed = m_IsWalking ? m_WalkSpeed : m_RunSpeed;
@@ -276,6 +290,23 @@ namespace UnityStandardAssets.Characters.FirstPerson
         public void DisableAnimator()
         {
             GetComponent<Animator>().enabled = false;
+        }
+
+        public void LiftMapUp()
+        {
+            liftMap.SetBool("Up", true);
+        }
+
+        public void FlipToRightSide()
+        {
+            flipMap.SetBool("MapSide", false);
+        }
+
+        public void LookAt()
+        {
+            Vector3 lTargetDir = m_Target.position - m_Camera.transform.position;
+            //lTargetDir.y = 0.0f;
+            m_Camera.transform.rotation = Quaternion.RotateTowards(m_Camera.transform.rotation, Quaternion.LookRotation(lTargetDir), Time.deltaTime*25f);
         }
     }
 }

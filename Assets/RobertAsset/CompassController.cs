@@ -6,6 +6,8 @@ public class CompassController : MonoBehaviour
 {
     [SerializeField]private Transform CursorTransform;
     [SerializeField] private Transform CompassTransform;
+    [SerializeField] private Transform plateTransform;
+    [SerializeField] private Animator animator;
     private Quaternion thisRotation;
     public float a;
     float yVelocity = 0.0f;
@@ -25,10 +27,13 @@ public class CompassController : MonoBehaviour
 
         // Dampen towards the target rotation
 
-       // float newPosition = Mathf.SmoothDampAngle(CursorTransform.localEulerAngles.z, a + CompassTransform.eulerAngles.y, ref yVelocity, 0.3f);
-        
+        // float newPosition = Mathf.SmoothDampAngle(CursorTransform.localEulerAngles.z, a + CompassTransform.eulerAngles.y, ref yVelocity, 0.3f);
+        if (animator.GetBool("Up"))
+        {
+            plateTransform.Rotate(0,0, Input.mouseScrollDelta.y * 5);
+        }
 
-        CursorTransform.localEulerAngles = new Vector3(-90,0, a + CompassTransform.eulerAngles.y);
+        CursorTransform.localEulerAngles = new Vector3(-90,0, a - CompassTransform.eulerAngles.y);
         //CursorTransform.Rotate(new Vector3(0,0,Quaternion.Slerp(CursorTransform.rotation, target, Time.deltaTime * 3).z),Space.Self);
         //CursorTransform.Rotate = 0,0, ,);
     }
