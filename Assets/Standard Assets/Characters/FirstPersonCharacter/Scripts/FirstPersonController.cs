@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 using UnityStandardAssets.Utility;
@@ -46,8 +47,9 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private Animator flipMap;
 
         public bool canControl = true;
-
+        [HideInInspector] public string matMaskName;
         public Transform m_Target;
+        [SerializeField]private Material travelBrochureMat;
         // Use this for initialization
         private void Start()
         {
@@ -63,6 +65,13 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_Jumping = false;
             m_AudioSource = GetComponent<AudioSource>();
 			m_MouseLook.Init(transform , m_Camera.transform);
+
+
+            travelBrochureMat.SetFloat("_mask1value", 0);
+            travelBrochureMat.SetFloat("_mask2value", 0);
+            travelBrochureMat.SetFloat("_mask3value", 0);
+            travelBrochureMat.SetFloat("_mask4value", 0);
+            travelBrochureMat.SetFloat("_mask5value", 0);
         }
 
 
@@ -234,7 +243,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 #if !MOBILE_INPUT
             // On standalone builds, walk/run speed is modified by a key press.
             // keep track of whether or not the character is walking or running
-            //m_IsWalking = true;
+            m_IsWalking = true;
 #endif
             // set the desired speed to be walking or running
             speed = m_IsWalking ? m_WalkSpeed : m_RunSpeed;
@@ -307,6 +316,24 @@ namespace UnityStandardAssets.Characters.FirstPerson
             Vector3 lTargetDir = m_Target.position - m_Camera.transform.position;
             //lTargetDir.y = 0.0f;
             m_Camera.transform.rotation = Quaternion.RotateTowards(m_Camera.transform.rotation, Quaternion.LookRotation(lTargetDir), Time.deltaTime*25f);
+        }
+
+        public void startImageTranstionCo()
+        {
+            StartCoroutine(MatTrans(matMaskName));
+        }
+
+        IEnumerator MatTrans(string b)
+        {
+
+            for (float a = 0; a <= 1; a+=Time.deltaTime/2)
+            {
+                travelBrochureMat.SetFloat(b, a);
+                yield return null;
+            }
+            travelBrochureMat.SetFloat(b, 1);
+            
+            
         }
     }
 }

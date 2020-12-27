@@ -10,6 +10,7 @@ public class EncounterTrigger : MonoBehaviour
     private Animator playerAnimator;
     [SerializeField] private Transform target;
     [SerializeField] private GameObject Particles;
+    [SerializeField] private string maskName;
     
     private UnityStandardAssets.Characters.FirstPerson.FirstPersonController firstPersonController;
     // Start is called before the first frame update
@@ -32,6 +33,7 @@ public class EncounterTrigger : MonoBehaviour
         {
             playerAnimator.enabled = true;
             Particles.SetActive(false);
+            firstPersonController.matMaskName = maskName;
             //liftMap.SetBool("Up",true);
             //flipMap.SetBool("MapSide",true);
             Debug.Log("activate encounter animation");
